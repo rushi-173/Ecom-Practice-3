@@ -126,6 +126,18 @@ export default function App() {
       //   updateCart([...cart, { ...item, cartQuantity: 1 }]);
       // }
     }
+    function removeFromCart(item) {
+      let obj = {};
+      let pid = item.id;
+      obj[pid] = cart[pid] - 1;
+      if (obj[pid] <= 0) {
+        let tempcart = { ...cart };
+        delete tempcart[pid];
+        updateCart({ ...tempcart });
+      } else {
+        updateCart({ ...cart, ...obj });
+      }
+    }
     // {plantItem.quantity
     //   ? isNan(plantItem.quantity - cart[plantItem.id])
     //   : plantItem.quantity - cart[plantItem.id]}
@@ -142,6 +154,7 @@ export default function App() {
         return (
           <div
             style={{
+              marginTop: "1rem",
               display: "flex",
               height: "2rem",
               width: "100%",
@@ -151,16 +164,33 @@ export default function App() {
           >
             <button
               className="btn"
-              style={{ padding: "0.1rem", width: "3rem", height: "2rem" }}
+              style={{
+                fontWeight: "700",
+                padding: "0.1rem",
+                width: "3rem",
+                height: "2rem"
+              }}
+              onClick={() => {
+                removeFromCart(plantItem);
+              }}
             >
-              +
+              -
             </button>
             <p style={{ marginTop: "0.5rem" }}>{cart[plantItem.id]}</p>
             <button
               className="btn"
-              style={{ padding: "0.1rem", width: "3rem", height: "2rem" }}
+              style={{
+                fontWeight: "700",
+                padding: "0.1rem",
+                width: "3rem",
+                height: "2rem"
+              }}
+              disabled={addBtn}
+              onClick={() => {
+                addToCart(plantItem);
+              }}
             >
-              -
+              +
             </button>
           </div>
         );
@@ -173,13 +203,11 @@ export default function App() {
         );
       }
     }
-    return (
-      <div className="product-card" key={plantItem.id}>
-        <img src={plantItem.img} height="200px" alt={plantItem.name} />
-        <div style={{ textAlign: "left", padding: "1rem" }}>
-          <ProductName name={plantItem.name} />
-          <ProductPrice price={plantItem.price} dprice={plantItem.dprice} />
-          <ProductInfo />
+    function ProductCardButtons() {
+      if (navItem == "cart") {
+        return <div></div>;
+      } else {
+        return (
           <div>
             <button
               onClick={() => {
@@ -198,6 +226,17 @@ export default function App() {
               <WishlistBtn pid={plantItem.id} wlist={wishlist} />
             </button>
           </div>
+        );
+      }
+    }
+    return (
+      <div className="product-card" key={plantItem.id}>
+        <img src={plantItem.img} height="200px" alt={plantItem.name} />
+        <div style={{ textAlign: "left", padding: "1rem" }}>
+          <ProductName name={plantItem.name} />
+          <ProductPrice price={plantItem.price} dprice={plantItem.dprice} />
+          <ProductInfo />
+          <ProductCardButtons />
         </div>
       </div>
     );
