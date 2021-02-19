@@ -1,2 +1,2 @@
-# Ecom-Practice-3
+# Basic-Ecom-Site
 Created with CodeSandbox
